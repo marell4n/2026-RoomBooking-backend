@@ -15,3 +15,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Downgraded Swashbuckle.AspNetCore dari 10.0.0 ke 6.6.2.
 - Implementasi controller secara manual untuk RoomsController dan BookingsController (karena masalah scaffolding)
 - Mengubah database migration menjadi satu `IntialCreate` migration.
+- Menggunakan Scalar (sebelumnya Swagger) untuk melihat dokumentasi API.
