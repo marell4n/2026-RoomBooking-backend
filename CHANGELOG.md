@@ -12,3 +12,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Mengonfigurasi koneksi database di appsettings.json.
 - Menambahkan Room & Booking model dengan attribute validasi.
 - Menambahkan AppDbContext dan MySQL service di Program.cs.
+- Downgraded Swashbuckle.AspNetCore dari 10.0.0 ke 6.6.2.
