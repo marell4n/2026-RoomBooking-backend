@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RoomBookingBackend.Data;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add Controllers
 builder.Services.AddControllers();
 
-// Add Swagger for API documentation
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Add Scalar 
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -24,6 +24,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Room Booking API")
+            .WithTheme(ScalarTheme.Mars) // Bisa ganti theme: Moon, Mars, DeepSpace, dll
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
 }
 
 app.UseHttpsRedirection();

@@ -13,3 +13,5 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menambahkan Room & Booking model dengan attribute validasi.
 - Menambahkan AppDbContext dan MySQL service di Program.cs.
 - Downgraded Swashbuckle.AspNetCore dari 10.0.0 ke 6.6.2.
+- Implementasi controller secara manual untuk RoomsController dan BookingsController (karena masalah scaffolding)
+- Mengubah database migration menjadi satu `IntialCreate` migration.
