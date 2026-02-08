@@ -10,3 +10,5 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menambahkan .gitignore.
 - Menambahkan MySQL Entity Framework Core packages.
 - Mengonfigurasi koneksi database di appsettings.json.
+- Menambahkan Room & Booking model dengan attribute validasi.
+- Menambahkan AppDbContext dan MySQL service di Program.cs.
