@@ -41,6 +41,8 @@ namespace RoomBookingBackend.Models
 
         public DateTime? StatusUpdatedAt { get; set; } // Waktu terakhir status diupdate
 
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
         public bool IsDeleted { get; set; } = false; // Properti soft delete
     }
 }

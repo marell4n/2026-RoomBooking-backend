@@ -23,3 +23,5 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menambahkan soft delete (IsDeleted) untuk Room and Booking.
 - Menambahkan timestamp kapan `BookingStatus` diubah.
 - Memperbaiki controller sesuai dengan DTO, fitur soft delete dan update `BookingStatus`.
+- Memperbaiki controllers karena inconsisten penamaan variabel.
+- Memperbaiki perbedaan DTO dengan controllers dan models.

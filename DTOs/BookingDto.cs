@@ -4,7 +4,7 @@ using RoomBookingBackend.Models;
 
 namespace RoomBookingBackend.DTOs
 {
-    // Request (Membuat data dari client)
+    // Request (Membuat/update data dari client)
     public class CreateBookingDto
     {
         [Required]
@@ -36,15 +36,13 @@ namespace RoomBookingBackend.DTOs
         public string Purpose { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public DateTime? StatusUpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
     // Request (update status booking)
     public class UpdateBookingStatusDto
     {
         [Required]
-        public int Id { get; set; }
-
-        [Required]
-        public string Status { get; set; } = string.Empty;
+        public Booking.BookingStatus Status { get; set; }
     }
 }

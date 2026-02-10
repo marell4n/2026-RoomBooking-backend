@@ -23,6 +23,7 @@ namespace RoomBookingBackend.Controllers
         {
             // Maping entity ke Dto
             var rooms = await _context.Rooms
+                .Where(r => !r.IsDeleted) // Filter soft deleted rooms
                 .Select(r => new RoomDto
                 {
                     Id = r.Id,
@@ -47,13 +48,15 @@ namespace RoomBookingBackend.Controllers
             }
 
             // Maping entity ke Dto
-            return new RoomDto
+            var roomDto = new RoomDto
             {
                 Id = room.Id,
                 Name = room.Name,
                 Capacity = room.Capacity,
                 Description = room.Description
             };
+
+            return roomDto;
         }
 
         // POST: api/Rooms
@@ -65,7 +68,8 @@ namespace RoomBookingBackend.Controllers
             {
                 Name = roomDto.Name,
                 Capacity = roomDto.Capacity,
-                Description = roomDto.Description
+                Description = roomDto.Description,
+                IsDeleted = false
             };
 
             // Simpan ke database
@@ -81,7 +85,7 @@ namespace RoomBookingBackend.Controllers
                 Description = room.Description
             };
 
-            return CreatedAtAction("GetRoom", new { id = room.Id }, resultDTO);
+            return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, resultDTO);
         }
 
         // PUT: api/Rooms/5
@@ -92,7 +96,7 @@ namespace RoomBookingBackend.Controllers
             // Cari data lama di database
             var existingRoom = await _context.Rooms.FindAsync(id);
 
-            if (room == null)
+            if (existingRoom == null || existingRoom.IsDeleted)
             {
                 return BadRequest();
             }
@@ -101,8 +105,6 @@ namespace RoomBookingBackend.Controllers
             existingRoom.Name = roomDto.Name;
             existingRoom.Capacity = roomDto.Capacity;
             existingRoom.Description = roomDto.Description;
-
-            _context.Entry(existingRoom).State = EntityState.Modified;
 
             try
             {
@@ -128,7 +130,8 @@ namespace RoomBookingBackend.Controllers
         public async Task<IActionResult> DeleteRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
-            if (room == null)
+
+            if (room == null || room.IsDeleted)
             {
                 return NotFound();
             }

@@ -23,6 +23,8 @@ namespace RoomBookingBackend.Controllers
         {
             // Maping entity ke Dto
             var bookings = await _context.Bookings
+                .Include(b => b.Room)
+                .Where(b => !b.IsDeleted) // Filter soft deleted bookings
                 .Select(b => new BookingDto
                 {
                     Id = b.Id,
@@ -82,8 +84,8 @@ namespace RoomBookingBackend.Controllers
             bool isConflict = await _context.Bookings.AnyAsync(b => 
                 b.RoomId == bookingDto.RoomId &&
                 !b.IsDeleted && // Abaikan booking yang sudah dihapus
-                b.Status != BookingStatus.Rejected && // Abaikan yang ditolak
-                b.Status != BookingStatus.Cancelled && // Abaikan yang batal
+                b.Status != Booking.BookingStatus.Rejected && // Abaikan yang ditolak
+                b.Status != Booking.BookingStatus.Cancelled && // Abaikan yang batal
                 ((bookingDto.StartTime < b.EndTime && bookingDto.StartTime >= b.StartTime) || 
                  (bookingDto.EndTime > b.StartTime && bookingDto.EndTime <= b.EndTime))
             );
@@ -101,8 +103,9 @@ namespace RoomBookingBackend.Controllers
                 StartTime = bookingDto.StartTime,
                 EndTime = bookingDto.EndTime,
                 Purpose = bookingDto.Purpose,
-                Status = BookingStatus.Pending, // Default status
-                IsDeleted = false
+                Status = Booking.BookingStatus.Pending, // Default status
+                IsDeleted = false,
+                UpdatedAt = DateTime.UtcNow
             };
 
             _context.Bookings.Add(booking);
@@ -115,12 +118,14 @@ namespace RoomBookingBackend.Controllers
             {
                 Id = booking.Id,
                 RoomId = booking.RoomId,
-                RoomName = booking.Room?.Name ?? "Unknown",
+                RoomName = booking.Room?.Name ?? "-",
                 BookedBy = booking.BookedBy,
                 StartTime = booking.StartTime,
                 EndTime = booking.EndTime,
                 Purpose = booking.Purpose,
-                Status = booking.Status.ToString()
+                Status = booking.Status.ToString(),
+                StatusUpdatedAt = booking.StatusUpdatedAt,
+                UpdatedAt = booking.UpdatedAt
             };
 
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, resultDto);
@@ -131,14 +136,17 @@ namespace RoomBookingBackend.Controllers
         public async Task<IActionResult> DeleteBooking(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
+            if (booking == null || booking.IsDeleted)
             {
                 return NotFound();
             }
 
             // Soft delete
             booking.IsDeleted = true;
-            booking.Status = BookingStatus.Cancelled; // Set status to Cancelled
+            booking.Status = Booking.BookingStatus.Cancelled; // Set status to Cancelled
+            booking.StatusUpdatedAt = DateTime.UtcNow;
+            booking.UpdatedAt = DateTime.UtcNow;
+
             _context.Entry(booking).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -148,7 +156,7 @@ namespace RoomBookingBackend.Controllers
 
         //PUT: api/Bookings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBooking(int id, UpdateBookingStatusDto updateDto)
+        public async Task<IActionResult> PutBooking(int id, CreateBookingDto bookingDto)
         {
             var booking = await _context.Bookings.FindAsync(id);
 
@@ -164,8 +172,8 @@ namespace RoomBookingBackend.Controllers
                 b.RoomId == bookingDto.RoomId &&
                 b.Id != id && // Abaikan diri sendiri
                 !b.IsDeleted &&
-                b.Status != BookingStatus.Rejected &&
-                b.Status != BookingStatus.Cancelled &&
+                b.Status != Booking.BookingStatus.Rejected &&
+                b.Status != Booking.BookingStatus.Cancelled &&
                 ((bookingDto.StartTime < b.EndTime && bookingDto.StartTime >= b.StartTime) || 
                  (bookingDto.EndTime > b.StartTime && bookingDto.EndTime <= b.EndTime))
             );
@@ -202,7 +210,7 @@ namespace RoomBookingBackend.Controllers
         // PATCH: api/Bookings/5/status
         // Digunakan khusus untuk mengubah Status (Approve/Reject/Cancel)
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateBookingStatus([FromRoute] int id, [FromBody] BookingStatusUpdateDto statusDto)
+        public async Task<IActionResult> UpdateBookingStatusDto([FromRoute] int id, [FromBody] UpdateBookingStatusDto statusDto)
         {
             var booking = await _context.Bookings.FindAsync(id);
 
@@ -219,6 +227,7 @@ namespace RoomBookingBackend.Controllers
             
             // Update timestamp umum juga
             booking.UpdatedAt = DateTime.UtcNow;
+            
 
             await _context.SaveChangesAsync();
 

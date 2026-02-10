@@ -10,7 +10,7 @@ namespace RoomBookingBackend.Data
         }
 
         public DbSet<Room> Rooms { get; set; }
-        // public DbSet<Booking> Bookings { get; set; } // Uncomment this line  for second migration
+        public DbSet<Booking> Bookings { get; set; } // Uncomment this line  for second migration
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
