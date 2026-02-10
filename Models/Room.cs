@@ -14,11 +14,11 @@ namespace RoomBookingBackend.Models
         [Required]
         public int Capacity { get; set; }
 
+        [Required]
         [MaxLength(255)]
         public string Description { get; set; } = string.Empty;
 
-        public bool IsAvailable { get; set; } = true;
-
+        // relasi one-to-many dengan Booking
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
