@@ -16,3 +16,6 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Implementasi controller secara manual untuk RoomsController dan BookingsController (karena masalah scaffolding)
 - Mengubah database migration menjadi satu `IntialCreate` migration.
 - Menggunakan Scalar (sebelumnya Swagger) untuk melihat dokumentasi API.
+- Menghapus properti `IsAvailable` dari Models\Room.cs.
+- Menambahkan enum `BookingStatus` untuk properti `Status` di Models\Booking.cs
+- Membuat DTO untuk Room dan Booking.
