@@ -19,3 +19,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menghapus properti `IsAvailable` dari Models\Room.cs.
 - Menambahkan enum `BookingStatus` untuk properti `Status` di Models\Booking.cs
 - Membuat DTO untuk Room dan Booking.
+- Menambahkan seeding db untuk default `Rooms` (beberapa ruangan di gedung D4).
