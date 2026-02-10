@@ -38,5 +38,9 @@ namespace RoomBookingBackend.Models
 
         [Required]
         public BookingStatus Status { get; set; } = BookingStatus.Pending; // Status peminjaman
+
+        public DateTime? StatusUpdatedAt { get; set; } // Waktu terakhir status diupdate
+
+        public bool IsDeleted { get; set; } = false; // Properti soft delete
     }
 }

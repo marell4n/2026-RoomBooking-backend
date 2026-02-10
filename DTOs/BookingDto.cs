@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 using RoomBookingBackend.Models;
 
 namespace RoomBookingBackend.DTOs
@@ -28,11 +29,13 @@ namespace RoomBookingBackend.DTOs
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
+        public string RoomName { get; set; } = string.Empty;
         public string BookedBy { get; set; } = string.Empty;
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Purpose { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public DateTime? StatusUpdatedAt { get; set; }
     }
 
     // Request (update status booking)

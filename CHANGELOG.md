@@ -20,3 +20,5 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menambahkan enum `BookingStatus` untuk properti `Status` di Models\Booking.cs
 - Membuat DTO untuk Room dan Booking.
 - Menambahkan seeding db untuk default `Rooms` (beberapa ruangan di gedung D4).
+- Menambahkan soft delete (IsDeleted) untuk Room and Booking.
+- Menambahkan timestamp kapan `BookingStatus` diubah.

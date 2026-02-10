@@ -20,5 +20,8 @@ namespace RoomBookingBackend.Models
 
         // relasi one-to-many dengan Booking
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+        // properti soft delete
+        public bool IsDeleted { get; set; } = false;
     }
 }
