@@ -22,3 +22,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Menambahkan seeding db untuk default `Rooms` (beberapa ruangan di gedung D4).
 - Menambahkan soft delete (IsDeleted) untuk Room and Booking.
 - Menambahkan timestamp kapan `BookingStatus` diubah.
+- Memperbaiki controller sesuai dengan DTO, fitur soft delete dan update `BookingStatus`.
