@@ -25,3 +25,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Memperbaiki controller sesuai dengan DTO, fitur soft delete dan update `BookingStatus`.
 - Memperbaiki controllers karena inconsisten penamaan variabel.
 - Memperbaiki perbedaan DTO dengan controllers dan models.
+- Menambahkan migrasi untuk tabel `Rooms` dan `Bookings`
