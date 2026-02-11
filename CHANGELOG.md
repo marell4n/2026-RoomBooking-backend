@@ -27,6 +27,9 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Mengubah **database migration** menjadi *satu* `IntialCreate` migration.
 - Menggunakan **Scalar** (sebelumnya Swagger) untuk melihat *dokumentasi API*.
 - Menghapus properti `IsAvailable` dari Models\Room.cs.
+
+### Fixed
 - Memperbaiki **controllers** sesuai dengan *DTO*, fitur *soft delete* dan *update* `BookingStatus`.
 - Memperbaiki **controllers** karena inconsisten penamaan variabel.
 - Memperbaiki perbedaan **DTO** dengan controllers dan models.
+- Memperbaiki endpoint `GET` agar menampilkan `UpdateAt` dan `StatusUpdateAt`.

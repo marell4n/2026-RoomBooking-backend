@@ -34,7 +34,9 @@ namespace RoomBookingBackend.Controllers
                     StartTime = b.StartTime,
                     EndTime = b.EndTime,
                     Purpose = b.Purpose,
-                    Status = b.Status.ToString()
+                    Status = b.Status.ToString(),
+                    StatusUpdatedAt = b.StatusUpdatedAt,
+                    UpdatedAt = b.UpdatedAt
                 })
                 .ToListAsync();
 
@@ -63,7 +65,9 @@ namespace RoomBookingBackend.Controllers
                 StartTime = booking.StartTime,
                 EndTime = booking.EndTime,
                 Purpose = booking.Purpose,
-                Status = booking.Status.ToString()
+                Status = booking.Status.ToString(),
+                StatusUpdatedAt = booking.StatusUpdatedAt,
+                UpdatedAt = booking.UpdatedAt
             };
 
             return bookingDto;
