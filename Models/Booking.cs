@@ -5,6 +5,14 @@ namespace RoomBookingBackend.Models
 {
     public class Booking
     {
+        public enum BookingStatus
+        {
+            Pending,
+            Approved,
+            Rejected,
+            Cancelled
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -27,5 +35,14 @@ namespace RoomBookingBackend.Models
 
         [MaxLength(255)]
         public string Purpose { get; set; } = string.Empty; // Keperluan peminjaman
+
+        [Required]
+        public BookingStatus Status { get; set; } = BookingStatus.Pending; // Status peminjaman
+
+        public DateTime? StatusUpdatedAt { get; set; } // Waktu terakhir status diupdate
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsDeleted { get; set; } = false; // Properti soft delete
     }
 }

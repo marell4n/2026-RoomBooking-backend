@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RoomBookingBackend.Data;
 using RoomBookingBackend.Models;
+using RoomBookingBackend.DTOs;
 
 namespace RoomBookingBackend.Controllers
 {
@@ -18,45 +19,92 @@ namespace RoomBookingBackend.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetRooms()
         {
-            return await _context.Rooms.ToListAsync();
+            // Maping entity ke Dto
+            var rooms = await _context.Rooms
+                .Where(r => !r.IsDeleted) // Filter soft deleted rooms
+                .Select(r => new RoomDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Capacity = r.Capacity,
+                    Description = r.Description
+                })
+                .ToListAsync();
+
+            return rooms;
         }
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id)
+        public async Task<ActionResult<RoomDto>> GetRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
 
-            if (room == null)
+            if (room == null || room.IsDeleted)
             {
                 return NotFound();
             }
 
-            return room;
+            // Maping entity ke Dto
+            var roomDto = new RoomDto
+            {
+                Id = room.Id,
+                Name = room.Name,
+                Capacity = room.Capacity,
+                Description = room.Description
+            };
+
+            return roomDto;
         }
 
         // POST: api/Rooms
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult<RoomDto>> PostRoom(CreateRoomDto roomDto)
         {
+            // Maping Dto ke entity
+            var room = new Room
+            {
+                Name = roomDto.Name,
+                Capacity = roomDto.Capacity,
+                Description = roomDto.Description,
+                IsDeleted = false
+            };
+
+            // Simpan ke database
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRoom", new { id = room.Id }, room);
+            // Mapping Entity ke DTO (response ke user)
+            var resultDTO = new RoomDto
+            {
+                Id = room.Id,
+                Name = room.Name,
+                Capacity = room.Capacity,
+                Description = room.Description
+            };
+
+            return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, resultDTO);
         }
 
         // PUT: api/Rooms/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, Room room)
+        public async Task<IActionResult> PutRoom(int id, CreateRoomDto roomDto)
         {
-            if (id != room.Id)
+            // Map DTO to entity
+            // Cari data lama di database
+            var existingRoom = await _context.Rooms.FindAsync(id);
+
+            if (existingRoom == null || existingRoom.IsDeleted)
             {
                 return BadRequest();
             }
 
-            _context.Entry(room).State = EntityState.Modified;
+            // update field lama dengan yang baru
+            existingRoom.Name = roomDto.Name;
+            existingRoom.Capacity = roomDto.Capacity;
+            existingRoom.Description = roomDto.Description;
 
             try
             {
@@ -82,12 +130,15 @@ namespace RoomBookingBackend.Controllers
         public async Task<IActionResult> DeleteRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
-            if (room == null)
+
+            if (room == null || room.IsDeleted)
             {
                 return NotFound();
             }
 
-            _context.Rooms.Remove(room);
+            // Soft delete
+            room.IsDeleted = true; // Tandai terhapus
+            _context.Entry(room).State = EntityState.Modified; // Update status di database
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -95,7 +146,7 @@ namespace RoomBookingBackend.Controllers
 
         private bool RoomExists(int id)
         {
-            return _context.Rooms.Any(e => e.Id == id);
+            return _context.Rooms.Any(e => e.Id == id && !e.IsDeleted);
         }
     }
 }
