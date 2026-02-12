@@ -41,3 +41,4 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 - Memperbaiki **controllers** karena inconsisten penamaan variabel.
 - Memperbaiki perbedaan **DTO** dengan controllers dan models.
 - Memperbaiki endpoint `GET` agar menampilkan `UpdateAt` dan `StatusUpdateAt`.
+- Menambahkan **CORS policy** agar frontend bisa berjalan lancar dengan backend.

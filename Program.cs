@@ -5,6 +5,17 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// CORS Configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
 
 // Configure Database Context with MySQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -33,6 +44,9 @@ if (app.Environment.IsDevelopment())
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
+
+// Use CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
