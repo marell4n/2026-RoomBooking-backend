@@ -46,3 +46,11 @@ Semua perubahan yang dilakukan akan didokumentasikan di dalam file ini.
 
 ### Added
 - Menambahkan **CORS policy** agar frontend bisa berjalan lancar dengan backend.
+
+## [1.0.2] - 2026-02-14
+
+### Fixed
+- **Booking Update Logic (Security)**:
+    - Memperbarui endpoint `PUT /api/bookings/{id}` untuk memaksa status booking kembali menjadi **Pending** setiap kali data reservasi (Jam/Ruangan/Keperluan) diedit.
+    - Hal ini mencegah celah keamanan di mana pengguna bisa mengubah detail booking yang sudah *Approved* tanpa melalui persetujuan ulang Admin.
+    - Otomatis memperbarui timestamp `StatusUpdatedAt` saat pengeditan terjadi.

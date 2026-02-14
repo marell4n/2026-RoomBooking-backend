@@ -193,6 +193,10 @@ namespace RoomBookingBackend.Controllers
             booking.StartTime = bookingDto.StartTime;
             booking.EndTime = bookingDto.EndTime;
             booking.Purpose = bookingDto.Purpose;
+
+            // Reset status ke Pending jika ada perubahan
+            booking.Status = Booking.BookingStatus.Pending; 
+            booking.StatusUpdatedAt = DateTime.UtcNow;
             
             // Catat waktu update
             booking.UpdatedAt = DateTime.UtcNow;
@@ -229,10 +233,6 @@ namespace RoomBookingBackend.Controllers
             // Update Timestamp Audit (Otomatis dari Server)
             booking.StatusUpdatedAt = DateTime.UtcNow;
             
-            // Update timestamp umum juga
-            booking.UpdatedAt = DateTime.UtcNow;
-            
-
             await _context.SaveChangesAsync();
 
             return NoContent();
